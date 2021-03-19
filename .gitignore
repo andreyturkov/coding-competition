@@ -1,0 +1,12 @@
+CodingCompetition/.vs/
+CodingCompetition/CodingCompetition.Compiler/bin/
+CodingCompetition/CodingCompetition.Compiler/obj/
+
+CodingCompetition/CodingCompetition.Logging/bin/
+CodingCompetition/CodingCompetition.Logging/obj/
+
+CodingCompetition/CodingCompetition.Services/bin/
+CodingCompetition/CodingCompetition.Services/obj/
+
+CodingCompetition/CodingCompetition.Repository/bin/
+CodingCompetition/CodingCompetition.Repository/obj/
