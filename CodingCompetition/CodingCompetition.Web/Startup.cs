@@ -1,3 +1,7 @@
+using CodingCompetition.Application.Interfaces;
+using CodingCompetition.Application.Services;
+using CodingCompetition.Compiler.Interfaces;
+using CodingCompetition.Compiler.Services.Rextester;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +30,9 @@ namespace CodingCompetition.Web
 			{
 				configuration.RootPath = "ClientApp/dist";
 			});
+
+			services.AddTransient<ICodeCompiler, RextesterClient>();
+			services.AddTransient<IChallengeService, ChallengeService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

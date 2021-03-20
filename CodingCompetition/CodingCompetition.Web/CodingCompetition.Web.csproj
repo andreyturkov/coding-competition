@@ -23,6 +23,15 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\score-list\" />
+    <Folder Include="ClientApp\src\app\task-builder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodingCompetition.Services\CodingCompetition.Application.csproj" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

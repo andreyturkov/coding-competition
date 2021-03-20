@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "echo hello && ng serve",
     "build": "ng build",
     "build:ssr": "ng run CodingCompetition.Web:server:dev",
     "test": "ng test",
@@ -13,8 +13,10 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^11.2.6",
+    "@angular/cdk": "^11.2.5",
     "@angular/common": "^11.2.6",
     "@angular/forms": "^11.2.6",
+    "@angular/material": "^11.2.5",
     "@angular/platform-browser": "^11.2.6",
     "@angular/platform-browser-dynamic": "^11.2.6",
     "@angular/platform-server": "^11.2.6",
@@ -23,6 +25,7 @@
     "bootstrap": "^4.6.0",
     "core-js": "^3.9.1",
     "jquery": "3.6.0",
+    "ng2-ace-editor": "^0.3.9",
     "oidc-client": "^1.11.5",
     "popper.js": "^1.16.1",
     "rxjs": "^6.6.6",

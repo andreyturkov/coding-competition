@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingCompetition.Web", "CodingCompetition.Web\CodingCompetition.Web.csproj", "{29F071B4-5E67-4218-B114-EBA75F35F6FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingCompetition.Web", "CodingCompetition.Web\CodingCompetition.Web.csproj", "{29F071B4-5E67-4218-B114-EBA75F35F6FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingCompetition.Compiler", "CodingCompetition.Compiler\CodingCompetition.Compiler.csproj", "{BBFC3C1D-8F4E-4BB5-98F4-6138578DB8CA}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingCompetition.Logging",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingCompetition.Repository", "CodingCompetition.Repository\CodingCompetition.Repository.csproj", "{6CEC5142-5397-4366-9D88-D54E12B54047}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingCompetition.Services", "CodingCompetition.Services\CodingCompetition.Services.csproj", "{B64318CE-2C3E-4E98-89A0-956464BC3AC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingCompetition.Application", "CodingCompetition.Services\CodingCompetition.Application.csproj", "{B64318CE-2C3E-4E98-89A0-956464BC3AC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

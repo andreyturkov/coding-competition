@@ -1,0 +1,73 @@
+<mat-form-field appearance="fill" style="width: 100%">
+  <mat-label>Select a challenge</mat-label>
+  <mat-select (selectionChange)="selectChallenge($event.value)" [(value)]="challenge" style="width: 100%">
+    <mat-option *ngFor="let item of challenges" [value]="item">
+      {{item.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+<div [innerHTML]="challenge?.description"></div>
+
+<mat-form-field appearance="fill" *ngIf="challenge" style="float: right">
+  <mat-label>Language</mat-label>
+  <mat-select [(value)]="template">
+    <mat-option *ngFor="let item of challenge.templates" [value]="item">
+      {{getLanguageName(item)}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill" *ngIf="template" style="float: right">
+  <mat-label>
+    Theme   <span *ngIf="themeLoading" class="spinner">
+      <mat-spinner [diameter]="24"></mat-spinner>
+    </span>
+  </mat-label>
+  <mat-select (selectionChange)="loadTheme($event.value)" [(value)]="theme">
+    <mat-option *ngFor="let item of themes" [value]="item">
+      {{item}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<button *ngIf="template" (click)="runSolution()" mat-button color="primary" style="width: 100px">
+  Run
+  <span *ngIf="isRunning" class="spinner">
+    <mat-spinner [diameter]="24"></mat-spinner>
+  </span>
+</button>
+<button *ngIf="template" (click)="submitSolution()" mat-raised-button color="primary" class="primary" style="width: 100px">
+  Submit
+  <span *ngIf="isSubmitting" class="spinner">
+    <mat-spinner [diameter]="24"></mat-spinner>
+  </span>
+</button>
+
+
+<ace-editor #editor
+            *ngIf="template"
+            [(text)]="template.templateCode"
+            [mode]="'csharp'"
+            [theme]="'eclipse'"
+            [options]="options"
+            [readOnly]="false"
+            [autoUpdateContent]="true"
+            [durationBeforeCallback]="1000"
+            style="min-height: 500px; width:100%; overflow: auto;"></ace-editor>
+
+<div style="width: 100%" *ngIf="compileResult">
+  <div [style.color]="compileResult.success?  'green': 'red'">
+    {{compileResult.message}}
+  </div>
+  {{compileResult.runtime}}
+  {{compileResult.errors}}
+  <div *ngFor="let test of compileResult.failedTests" style="margin-bottom: 10px;">
+    <div>Input : <b>{{test.input}}</b></div>
+    <div>Actual Result : <b>{{test.actualResult}}</b></div>
+    <div>Expected Result : <b>{{test.expectedResult}}</b></div>
+  </div>
+</div>
+
+
