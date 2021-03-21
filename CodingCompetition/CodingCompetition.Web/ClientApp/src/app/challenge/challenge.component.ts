@@ -1,10 +1,13 @@
 import { Component, ViewChild, OnInit, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from '../shared/api.service';
 
 import 'brace';
 import 'brace/mode/csharp';
 import 'brace/mode/java';
+import { PlayerPopupComponent } from '../player-popup/player-popup.component';
+import { PlayerManager } from '../shared/player.manager';
 
 @Component({
   selector: 'challenge',
@@ -28,7 +31,11 @@ export class ChallengeComponent implements OnInit {
 
   @ViewChild('editor') editor;
 
-  constructor(private http: ApiService, private route: ActivatedRoute) {
+  constructor(
+    private http: ApiService,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private playerManager: PlayerManager) {
   }
 
   ngOnInit(): void {
@@ -85,13 +92,25 @@ export class ChallengeComponent implements OnInit {
     });
   }
 
+  openPlayerDialog(): void {
+    const dialogRef = this.dialog.open(PlayerPopupComponent, { width: '250px' });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.submitSolution();
+    });
+  }
+
   submitSolution(): void {
+
+    if (!this.playerManager.hasPlayer) {
+      return;
+    }
 
     const request = {
       challengeId: this.challenge.id,
       language: this.selectedTemplate.language,
       solutionCode: this.selectedTemplate.templateCode,
-      player: { nickname: 'andrew', email: 'andrew@turkov.com' } as Player
+      player: { nickname: this.playerManager.nickname, email: this.playerManager.email } as Player
     } as SubmitRequest;
 
     this.isSubmitting = true;

@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './shared/api.service';
 import { ScoreListComponent } from './score-list/score-list.component';
 import { ChallengeListComponent } from './challenge-list/challenge-list.component';
+import { PlayerManager } from './shared/player.manager';
+import { PlayerPopupComponent } from './player-popup/player-popup.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,8 @@ import { ChallengeListComponent } from './challenge-list/challenge-list.componen
     NavMenuComponent,
     HomeComponent,
     ScoreListComponent,
-    ChallengeListComponent
+    ChallengeListComponent,
+    PlayerPopupComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -37,7 +41,8 @@ import { ChallengeListComponent } from './challenge-list/challenge-list.componen
     AppRoutingModule
   ],
   providers: [
-    ApiService
+    ApiService,
+    PlayerManager
     ],
   bootstrap: [AppComponent]
 })
