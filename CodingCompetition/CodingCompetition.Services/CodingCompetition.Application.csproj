@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CodingCompetition.Compiler\CodingCompetition.Compiler.csproj" />
+    <ProjectReference Include="..\CodingCompetition.Data\CodingCompetition.Data.csproj" />
   </ItemGroup>
 
 </Project>

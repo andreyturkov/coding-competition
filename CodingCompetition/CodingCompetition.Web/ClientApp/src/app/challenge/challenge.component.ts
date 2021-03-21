@@ -1,4 +1,5 @@
-import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../shared/api.service';
 
 import 'brace';
@@ -15,64 +16,70 @@ export class ChallengeComponent implements OnInit {
     'gruvbox', 'idle_fingers', 'iplastic', 'katzenmilch', 'kr_theme', 'kuroir', 'merbivore', 'merbivore_soft', 'monokai', 'mono_industrial', 'pastel_on_dark', 'solarized_dark',
     'solarized_light', 'sqlserver', 'terminal', 'textmate', 'tomorrow', 'tomorrow_night', 'tomorrow_night_blue', 'tomorrow_night_bright', 'tomorrow_night_eighties',
     'twilight', 'vibrant_ink', 'xcode'];
-  theme: string;
-
-  challenges: Challenge[];
+  selectedTheme: string;
   challenge: Challenge;
-  template: ChallengeTemplate;
+  selectedTemplate: Template;
   languages: Language[];
-  compileResult: ChallengeResult;
-
+  compileResult: Result;
   isRunning = false;
   isSubmitting = false;
   themeLoading = false;
-
   options: any = { printMargin: false, enableBasicAutocompletion: true };
 
   @ViewChild('editor') editor;
 
-  constructor(private http: ApiService) {
+  constructor(private http: ApiService, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.http.get<Challenge[]>('Challenge').subscribe(result => {
-      this.challenges = result;
+
+    this.route.params.subscribe(params => {
+      const challengeId = params['id'];
+      this.http.get<Challenge>(`Challenge/${challengeId}`).subscribe(result => {
+        this.challenge = result;
+        this.selectedTemplate = this.challenge.templates[0];
+      });
     });
   }
 
   loadTheme(theme: string): void {
     this.themeLoading = true;
-    import(`brace/theme/${theme}`)
-      .then((module) => {
-        this.editor.setTheme(theme);
-        this.themeLoading = false;
-      });
+    import(`brace/theme/${theme}`).then((module) => {
+      this.editor.setTheme(theme);
+      this.themeLoading = false;
+    });
   }
-  getLanguageName(template) {
+
+  getLanguageName(template): string {
     switch (template.language) {
       case 0:
         return 'C#';
       case 1:
         return 'Java';
     }
+    return null;
   }
 
-  selectChallenge(challenge) {
-    this.challenge = challenge;
-    this.template = challenge.templates[0];
-    this.compileResult = null;
+  getEditorMode(): string {
+    switch (this.selectedTemplate.language) {
+      case 0:
+        return 'csharp';
+      case 1:
+        return 'java';
+    }
+    return null;
   }
 
   runSolution(): void {
 
     const request = {
       challengeId: this.challenge.id,
-      language: this.template.language,
-      solutionCode: this.template.templateCode
-    } as ChallengeSolution;
+      language: this.selectedTemplate.language,
+      solutionCode: this.selectedTemplate.templateCode
+    } as RunRequest;
 
     this.isRunning = true;
-    this.http.post<ChallengeResult>('Challenge/RunSolution', request).subscribe(result => {
+    this.http.post<Result>('Competition/RunSolution', request).subscribe(result => {
       this.compileResult = result;
       this.isRunning = false;
     });
@@ -82,15 +89,15 @@ export class ChallengeComponent implements OnInit {
 
     const request = {
       challengeId: this.challenge.id,
-      language: this.template.language,
-      solutionCode: this.template.templateCode
-    } as ChallengeSolution;
+      language: this.selectedTemplate.language,
+      solutionCode: this.selectedTemplate.templateCode,
+      player: { nickname: 'andrew', email: 'andrew@turkov.com' } as Player
+    } as SubmitRequest;
 
     this.isSubmitting = true;
-    this.http.post<ChallengeResult>('Challenge/SubmitSolution', request).subscribe(result => {
+    this.http.post<Result>('Competition/SubmitSolution', request).subscribe(result => {
       this.compileResult = result;
       this.isSubmitting = false;
     });
   }
-
 }

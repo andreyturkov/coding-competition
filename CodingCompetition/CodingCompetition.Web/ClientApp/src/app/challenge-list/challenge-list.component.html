@@ -1,0 +1,5 @@
+<mat-list role="list">
+  <mat-list-item role="listitem" *ngFor="let item of challenges">
+    <a class="nav-link text-dark" [routerLink]="'/challenge/' + item.id">{{item.name}}</a>
+  </mat-list-item>
+</mat-list>

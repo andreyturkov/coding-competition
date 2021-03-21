@@ -2,5 +2,8 @@ class Challenge {
   id: number;
   name: string;
   description: string;
-  templates: ChallengeTemplate[];
+
+  templates: Template[];
+  tests: Test[];
+  solutions: Solution[];
 }
