@@ -8,7 +8,6 @@ using CodingCompetition.Application.Models.Competition;
 using CodingCompetition.Compiler.Interfaces;
 using CodingCompetition.Compiler.Models;
 using Language = CodingCompetition.Application.Models.Language;
-using TestResult = CodingCompetition.Application.Models.Competition.TestResult;
 
 namespace CodingCompetition.Application.Services
 {
@@ -35,7 +34,7 @@ namespace CodingCompetition.Application.Services
 
 			var result = new Result
 			{
-				TestResults = new List<TestResult>()
+				TestResults = new List<Models.Competition.TestResult>()
 			};
 
 			foreach (var test in challenge.Tests)
@@ -51,7 +50,7 @@ namespace CodingCompetition.Application.Services
 					break;
 				}
 
-				result.TestResults.Add(new TestResult
+				result.TestResults.Add(new Models.Competition.TestResult
 				{
 					Success = compileResult.Result == test.ExpectedResult,
 					ActualResult = compileResult.Result,
@@ -69,7 +68,7 @@ namespace CodingCompetition.Application.Services
 
 		public async Task<Result> SubmitSolution(SubmitRequest request)
 		{
-			await _playerService.AddOrUpdate(request.Player);
+			await _playerService.EnsureUserExists(request.Player);
 
 			var result = await RunSolution(request);
 
@@ -110,9 +109,22 @@ namespace CodingCompetition.Application.Services
 				Message = result.Message,
 				Runtime = result.Runtime,
 				Warnings = result.Warnings,
-				Errors = result.Errors
+				Errors = result.Errors,
+				TestResults = result.TestResults.Select(CreateTestResult).ToList()
 			};
 		}
+
+		private static Models.TestResult CreateTestResult(Models.Competition.TestResult result)
+		{
+			return new Models.TestResult
+			{
+				Success = result.Success,
+				ActualResult = result.ActualResult,
+				ExpectedResult = result.ExpectedResult,
+				InputParameter = result.InputParameter
+			};
+		}
+
 		#endregion
 	}
 }

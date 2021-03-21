@@ -1,5 +1,13 @@
-<mat-list role="list">
-  <mat-list-item role="listitem" *ngFor="let item of challenges">
-    <a class="nav-link text-dark" [routerLink]="'/challenge/' + item.id">{{item.name}}</a>
-  </mat-list-item>
-</mat-list>
+<div class="container">
+  <mat-action-list role="list">
+    <mat-list-item role="listitem" *ngFor="let item of challenges">
+
+      <a class="nav-link text-dark" style="width: 100%" [routerLink]="'/challenge/' + item.id">
+        <div class="row">
+          <div class="col-lg"><h5>{{item.name}}</h5></div>
+          <div class="col-sm-3">Submissions {{item.solutions.length}}</div>
+        </div>
+      </a>
+    </mat-list-item>
+  </mat-action-list>
+</div>

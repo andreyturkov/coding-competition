@@ -9,14 +9,19 @@ namespace CodingCompetition.Application.Services
 	internal class SolutionService : ISolutionService
 	{
 		private readonly ISolutionRepository _solutionRepository;
+		private readonly ITestRepository _testRepository;
 		private readonly ITestResultService _testResultService;
 		private readonly IMapper _mapper;
 
-		public SolutionService(ISolutionRepository solutionRepository, ITestResultService testResultService, IMapper mapper)
+		public SolutionService(ISolutionRepository solutionRepository,
+			ITestRepository testRepository,
+			ITestResultService testResultService,
+			IMapper mapper)
 		{
 			_solutionRepository = solutionRepository;
 			_testResultService = testResultService;
 			_mapper = mapper;
+			_testRepository = testRepository;
 		}
 
 		public async Task AddSolution(Solution solution)

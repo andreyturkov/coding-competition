@@ -18,6 +18,7 @@ namespace CodingCompetition.Data.Services
 		{
 			return await DbSet
 				.Include(x => x.Submissions)
+				.ThenInclude(x => x.Challenge)
 				.OrderByDescending(x => x.Submissions.Count(c => c.Success))
 				.Take(take)
 				.ToListAsync();

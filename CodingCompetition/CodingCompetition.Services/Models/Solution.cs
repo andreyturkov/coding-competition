@@ -18,6 +18,6 @@ namespace CodingCompetition.Application.Models
 
 		public Player Player { get; set; }
 		public Challenge Challenge { get; set; }
-		public ICollection<TestResult> TestResults { get; set; }
+		public List<TestResult> TestResults { get; set; }
 	}
 }

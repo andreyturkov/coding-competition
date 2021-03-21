@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CodingCompetition.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using CodingCompetition.Data.Interfaces;
 
 namespace CodingCompetition.Data.Services
 {
@@ -17,11 +16,6 @@ namespace CodingCompetition.Data.Services
 			DbSet = context.Set<TEntity>();
 		}
 
-		protected IQueryable<TEntity> QueryableDbSet => DbSet.AsQueryable();
-
-		protected IQueryable<TEntity> AsNoTracking => DbSet.AsNoTracking();
-
-
 		public virtual async Task<TEntity> Get(int id)
 		{
 			return await DbSet.FindAsync(id);
@@ -35,29 +29,28 @@ namespace CodingCompetition.Data.Services
 		public virtual async Task Add(TEntity entity)
 		{
 			await DbSet.AddAsync(entity);
+			await Context.SaveChangesAsync();
 		}
 
 		public virtual async Task AddRange(IEnumerable<TEntity> entities)
 		{
 			await DbSet.AddRangeAsync(entities);
+			await Context.SaveChangesAsync();
 		}
 
-		public virtual void Attach(TEntity entity)
-		{
-			DbSet.Attach(entity);
-		}
-
-		public virtual void Update(TEntity entity)
+		public virtual async Task Update(TEntity entity)
 		{
 			DbSet.Update(entity);
+			await Context.SaveChangesAsync();
 		}
 
-		public virtual void UpdateRange(IEnumerable<TEntity> entities)
+		public virtual async Task UpdateRange(IEnumerable<TEntity> entities)
 		{
 			DbSet.UpdateRange(entities);
+			await Context.SaveChangesAsync();
 		}
 
-		public bool Delete(TEntity entity)
+		public async Task<bool> Delete(TEntity entity)
 		{
 			if (Context.Entry(entity).State == EntityState.Detached)
 			{
@@ -65,33 +58,9 @@ namespace CodingCompetition.Data.Services
 			}
 
 			DbSet.Remove(entity);
+			await Context.SaveChangesAsync();
 
 			return Context.Entry(entity).State == EntityState.Deleted;
-		}
-
-		public async Task<int> ExecuteSqlCommand(string sqlCommand, object[] sqlParameters)
-		{
-			if (!string.IsNullOrWhiteSpace(sqlCommand))
-			{
-				return await Context.Database.ExecuteSqlRawAsync(sqlCommand, sqlParameters);
-			}
-
-			return 0;
-		}
-
-		public async Task<object> ExecuteSqlQuery(string sqlCommand, object[] sqlParameters = null)
-		{
-			if (sqlParameters == null)
-			{
-				return await Context.Database.ExecuteSqlRawAsync(sqlCommand);
-			}
-
-			return await Context.Database.ExecuteSqlRawAsync(sqlCommand, sqlParameters);
-		}
-
-		public async Task Reload(TEntity entity)
-		{
-			await Context.Entry(entity).ReloadAsync();
 		}
 	}
 }

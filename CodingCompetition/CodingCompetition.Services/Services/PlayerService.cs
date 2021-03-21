@@ -27,10 +27,14 @@ namespace CodingCompetition.Application.Services
 			return _mapper.Map<IList<Player>>(result);
 		}
 
-		public async Task AddOrUpdate(Player player)
+		public async Task EnsureUserExists(Player player)
 		{
 			var result = await _playerRepository.Find(player.Email);
-			if (result != null) return;
+			if (result != null)
+			{
+				player.Id = result.Id;
+				return;
+			}
 
 			var entity = _mapper.Map<Data.Models.Player>(player);
 			await _playerRepository.Add(entity);

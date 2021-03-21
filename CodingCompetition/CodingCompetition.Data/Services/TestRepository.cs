@@ -8,5 +8,6 @@ namespace CodingCompetition.Data.Services
 		public TestRepository(ChallengesContext context) : base(context)
 		{
 		}
+
 	}
 }

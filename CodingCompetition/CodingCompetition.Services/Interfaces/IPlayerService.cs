@@ -7,6 +7,6 @@ namespace CodingCompetition.Application.Interfaces
 	public interface IPlayerService
 	{
 		Task<IList<Player>> GetTopPlayers(int take);
-		Task AddOrUpdate(Player player);
+		Task EnsureUserExists(Player player);
 	}
 }
