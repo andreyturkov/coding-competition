@@ -1,3 +1,10 @@
+using CodingCompetition.Application;
+using CodingCompetition.Application.Interfaces;
+using CodingCompetition.Application.Services;
+using CodingCompetition.Compiler;
+using CodingCompetition.Compiler.Interfaces;
+using CodingCompetition.Compiler.Services.Rextester;
+using CodingCompetition.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,12 +27,20 @@ namespace CodingCompetition.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews();
+			services.AddControllersWithViews()
+				.AddNewtonsoftJson(options =>
+					options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+				);
+
 			// In production, the Angular files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
 				configuration.RootPath = "ClientApp/dist";
 			});
+
+			services.AddDbContext(Configuration);
+			services.AddServices();
+			services.AddCompilers();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,87 @@
+<div class="container" *ngIf="challenge">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-lg">
+      <div class="row">
+        <div class="col-lg"></div>
+        <div class="col-sm-4">
+          <mat-form-field appearance="fill" *ngIf="selectedTemplate">
+            <mat-label>
+              Theme
+              <span *ngIf="themeLoading" class="spinner">
+                <mat-spinner [diameter]="24"></mat-spinner>
+              </span>
+            </mat-label>
+            <mat-select (selectionChange)="loadTheme($event.value)" [(value)]="theme">
+              <mat-option *ngFor="let item of themes" [value]="item">
+                {{item}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field appearance="fill" *ngIf="challenge">
+            <mat-label>Language</mat-label>
+            <mat-select [(value)]="selectedTemplate">
+              <mat-option *ngFor="let item of challenge.templates" [value]="item">
+                {{getLanguageName(item)}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <h3>{{challenge.name}}</h3>
+      <div [innerHTML]="challenge.description"></div>
+    </div>
+    <div class="col-lg">
+      <div class="row">
+        <ace-editor #editor
+                    *ngIf="selectedTemplate"
+                    [(text)]="selectedTemplate.templateCode"
+                    [mode]="getEditorMode()"
+                    [theme]="'eclipse'"
+                    [options]="options"
+                    [readOnly]="false"
+                    [autoUpdateContent]="true"
+                    [durationBeforeCallback]="1000"
+                    style="min-height: 500px; height: 100%; width: 100%; overflow: auto;"></ace-editor>
+      </div>
+      <div class="row">
+        <div class="col-lg"></div>
+        <div class="col-sm-4">
+          <button *ngIf="selectedTemplate" (click)="runSolution()" mat-button color="primary" style="width: 100px">
+            Run
+            <span *ngIf="isRunning" class="spinner">
+              <mat-spinner [diameter]="24"></mat-spinner>
+            </span>
+          </button>
+          <button *ngIf="selectedTemplate" (click)="openPlayerDialog()" mat-raised-button color="primary" class="primary" style="width: 100px">
+            Submit
+            <span *ngIf="isSubmitting" class="spinner">
+              <mat-spinner [diameter]="24"></mat-spinner>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div style="width: 100%" *ngIf="compileResult">
+          <div [style.color]="compileResult.success?  'green': 'red'">
+            {{compileResult.message}}
+          </div>
+          {{compileResult.runtime}}
+          {{compileResult.errors}}
+          <div *ngFor="let test of compileResult.failedTests" style="margin-bottom: 10px;">
+            <div>Input : <b>{{test.input}}</b></div>
+            <div>Actual Result : <b>{{test.actualResult}}</b></div>
+            <div>Expected Result : <b>{{test.expectedResult}}</b></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
