@@ -60,7 +60,7 @@ namespace CodingCompetition.Application.Services
 			}
 
 			result.Success = result.TestResults.Count(x => x.Success) == challenge.Tests.Count;
-			result.Message = $"Passed {result.TestResults.Count(x => x.Success)} of {result.TestResults.Count}";
+			result.Message = $"Passed {result.TestResults.Count(x => x.Success)} of {challenge.Tests.Count}";
 
 			return result;
 
