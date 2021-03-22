@@ -19,6 +19,7 @@ import { ScoreListComponent } from './score-list/score-list.component';
 import { ChallengeListComponent } from './challenge-list/challenge-list.component';
 import { PlayerManager } from './shared/player.manager';
 import { PlayerPopupComponent } from './player-popup/player-popup.component';
+import { Error404Component } from './error404/error404.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PlayerPopupComponent } from './player-popup/player-popup.component';
     HomeComponent,
     ScoreListComponent,
     ChallengeListComponent,
-    PlayerPopupComponent
+    PlayerPopupComponent,
+    Error404Component
   ],
   imports: [
     BrowserAnimationsModule,
@@ -43,7 +45,7 @@ import { PlayerPopupComponent } from './player-popup/player-popup.component';
   providers: [
     ApiService,
     PlayerManager
-    ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../shared/api.service';
+import { ActivatedRoute } from '@angular/router';
 
 import 'brace';
 import 'brace/mode/csharp';
@@ -13,24 +14,43 @@ import 'brace/mode/java';
 export class ScoreListComponent implements OnInit {
 
   players: Player[];
-  displayedColumns: string[] = ['nickname', 'email', 'submissions', 'challenges'];
+  displayedColumns: string[] = ['nickname', 'email', 'score', 'totalSubmissions',
+    'successfulSubmissions', 'successfulChallenges', 'failedSubmissions', 'failedChallenges'];
 
-  constructor(private http: ApiService) {
+  constructor(private http: ApiService, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.http.get<Player[]>('Players').subscribe(result => {
-      this.players = result;
+    this.route.queryParams.subscribe(params => {
+      const top = params['top'] ? params['top'] : 3;
+      this.http.get<Player[]>(`Players?top=${top}`).subscribe(result => {
+        this.players = result;
+      });
     });
+
   }
 
-  getPlayerSuccessSubmissions(player: Player): number {
-    let count = 0;
+  getTotalScore(player: Player): number {
+    return 100 * this.getSuccessSubmissions(player).length / player.submissions.length;
+  }
+
+  getSuccessSubmissions(player: Player): Solution[] {
+    const result = [];
     for (let i = 0; i < player.submissions.length; ++i) {
       if (player.submissions[i].success) {
-        count++;
+        result.push(player.submissions[i]);
       }
     }
-    return count;
+    return result;
+  }
+
+  getFailSubmissions(player: Player): Solution[] {
+    const result = [];
+    for (let i = 0; i < player.submissions.length; ++i) {
+      if (!player.submissions[i].success) {
+        result.push(player.submissions[i]);
+      }
+    }
+    return result;
   }
 }
