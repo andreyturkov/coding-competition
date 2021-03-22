@@ -12,7 +12,7 @@
                 <mat-spinner [diameter]="24"></mat-spinner>
               </span>
             </mat-label>
-            <mat-select (selectionChange)="loadTheme($event.value)" [(value)]="theme">
+            <mat-select (selectionChange)="loadEditorTheme($event.value)" [(value)]="selectedTheme">
               <mat-option *ngFor="let item of themes" [value]="item">
                 {{item}}
               </mat-option>
@@ -22,7 +22,7 @@
         <div class="col-sm">
           <mat-form-field appearance="fill" *ngIf="challenge">
             <mat-label>Language</mat-label>
-            <mat-select [(value)]="selectedTemplate">
+            <mat-select (selectionChange)="updateEditor($event.value)" [(value)]="selectedTemplate">
               <mat-option *ngFor="let item of challenge.templates" [value]="item">
                 {{getLanguageName(item)}}
               </mat-option>
@@ -40,14 +40,22 @@
     <div class="col-lg">
       <div class="row">
         <ace-editor #editor
-                    *ngIf="selectedTemplate"
                     [(text)]="selectedTemplate.templateCode"
-                    [mode]="getEditorMode()"
-                    [theme]="'eclipse'"
                     [options]="options"
+                    [mode]="defaultMode"
+                    [theme]="defaultTheme"
                     [readOnly]="false"
                     [autoUpdateContent]="true"
                     [durationBeforeCallback]="1000"
+                    (textChanged)="log($event, 'textChanged')"
+                    (blur)="log($event, 'blur')"
+                    (focus)="log($event, 'focus')"
+                    (copy)="log($event, 'copy')"
+                    (paste)="log($event, 'paste')"
+                    (change)="log($event, 'change')"
+                    (changeSession)="log($event, 'changeSession')"
+                    (changeCursor)="log($event, 'changeCursor')"
+                    (changeSelection)="log($event, 'changeSelection')"
                     style="min-height: 500px; height: 100%; width: 100%; overflow: auto;"></ace-editor>
       </div>
       <div class="row">
@@ -74,7 +82,7 @@
           </div>
           {{compileResult.runtime}}
           {{compileResult.errors}}
-          <div *ngFor="let test of compileResult.failedTests" style="margin-bottom: 10px;">
+          <div *ngFor="let test of failedTests" style="margin-bottom: 10px;">
             <div>Input : <b>{{test.input}}</b></div>
             <div>Actual Result : <b>{{test.actualResult}}</b></div>
             <div>Expected Result : <b>{{test.expectedResult}}</b></div>

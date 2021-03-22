@@ -20,6 +20,11 @@ namespace CodingCompetition.Data.Services
 			{
 				new Challenge
 				{
+					Name = "Hello World",
+					Description = @"<p>Return ""Hello World""</p>"
+				},
+				new Challenge
+				{
 					Name = "Fibonacci",
 					Description = "<p>Return first N items from Fibonacci sequence.</p>"
 				},
@@ -75,6 +80,67 @@ n == height.length
 					TemplateCode = @"
 public class Solution
 {
+	public string HelloWorld()
+	{
+	}
+}
+",
+					CompilerAdapter = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace Rextester
+{
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var result = new Solution().HelloWorld();
+			Console.Write(result);
+		}
+	}
+
+	/*SOLUTION_PLACEHOLDER*/
+}
+"
+				},
+				new Template
+				{
+					ChallengeId = 1,
+					Language = Language.Java,
+					TemplateCode = @"
+class Solution
+{
+	public String helloWorld()
+	{
+	}
+}
+",
+					CompilerAdapter = @"
+import java.util.*;
+import java.lang.*;
+
+class Rextester
+{  
+	public static void main(String args[])
+	{
+		String result = new Solution().helloWorld();
+		System.out.print(result);
+	}
+}   
+
+/*SOLUTION_PLACEHOLDER*/
+"
+				},
+				new Template
+				{
+					ChallengeId = 2,
+					Language = Language.CSharp,
+					TemplateCode = @"
+public class Solution
+{
 	public int[] FibonacciSequence(int n)
 	{
 	}
@@ -104,7 +170,7 @@ namespace Rextester
 				},
 				new Template
 				{
-					ChallengeId = 2,
+					ChallengeId = 3,
 					Language = Language.CSharp,
 					TemplateCode = @"
 public class Solution 
@@ -149,12 +215,13 @@ namespace Rextester
 
 			var tests = new[]
 			{
-				new Test {ChallengeId = 1, InputParameter = "5", ExpectedResult = "1,1,2,3,5"},
-				new Test {ChallengeId = 1, InputParameter = "8", ExpectedResult = "1,1,2,3,5,8,13,21"},
-				new Test {ChallengeId = 2, InputParameter = "1,8,6,2,5,4,8,3,7", ExpectedResult = "49"},
-				new Test {ChallengeId = 2, InputParameter = "1,1", ExpectedResult = "1"},
-				new Test {ChallengeId = 2, InputParameter = "4,3,2,1,4", ExpectedResult = "16"},
-				new Test {ChallengeId = 2, InputParameter = "1,2,1", ExpectedResult = "2"},
+				new Test {ChallengeId = 1, InputParameter = "", ExpectedResult = "Hello World"},
+				new Test {ChallengeId = 2, InputParameter = "5", ExpectedResult = "1,1,2,3,5"},
+				new Test {ChallengeId = 2, InputParameter = "8", ExpectedResult = "1,1,2,3,5,8,13,21"},
+				new Test {ChallengeId = 3, InputParameter = "1,8,6,2,5,4,8,3,7", ExpectedResult = "49"},
+				new Test {ChallengeId = 3, InputParameter = "1,1", ExpectedResult = "1"},
+				new Test {ChallengeId = 3, InputParameter = "4,3,2,1,4", ExpectedResult = "16"},
+				new Test {ChallengeId = 3, InputParameter = "1,2,1", ExpectedResult = "2"},
 			};
 			foreach (var t in tests)
 			{
