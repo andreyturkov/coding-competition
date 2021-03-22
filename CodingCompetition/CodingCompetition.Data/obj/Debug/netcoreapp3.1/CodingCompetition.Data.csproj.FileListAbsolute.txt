@@ -1,8 +1,0 @@
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\obj\Debug\netcoreapp3.1\CodingCompetition.Data.AssemblyInfoInputs.cache
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\obj\Debug\netcoreapp3.1\CodingCompetition.Data.AssemblyInfo.cs
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\bin\Debug\netcoreapp3.1\CodingCompetition.Data.deps.json
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\bin\Debug\netcoreapp3.1\CodingCompetition.Data.dll
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\bin\Debug\netcoreapp3.1\CodingCompetition.Data.pdb
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\obj\Debug\netcoreapp3.1\CodingCompetition.Data.dll
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\obj\Debug\netcoreapp3.1\CodingCompetition.Data.pdb
-D:\Projects\coding-competition\CodingCompetition\CodingCompetition.Data\obj\Debug\netcoreapp3.1\CodingCompetition.Data.csprojAssemblyReference.cache
