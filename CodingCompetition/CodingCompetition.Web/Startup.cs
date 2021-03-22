@@ -1,3 +1,4 @@
+using System.Text.Json;
 using CodingCompetition.Application;
 using CodingCompetition.Application.Interfaces;
 using CodingCompetition.Application.Services;
@@ -5,6 +6,7 @@ using CodingCompetition.Compiler;
 using CodingCompetition.Compiler.Interfaces;
 using CodingCompetition.Compiler.Services.Rextester;
 using CodingCompetition.Data;
+using CodingCompetition.Web.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,6 +43,12 @@ namespace CodingCompetition.Web
 			services.AddDbContext(Configuration);
 			services.AddServices();
 			services.AddCompilers();
+
+			services.AddSignalR()
+				.AddJsonProtocol(options =>
+				{
+					options.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+				});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +79,8 @@ namespace CodingCompetition.Web
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller}/{action=Index}/{id?}");
+				endpoints.MapHub<SharedPadHub>("/SharedPadHub");
+
 			});
 
 			app.UseSpa(spa =>

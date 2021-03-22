@@ -1,0 +1,11 @@
+.spinner {
+  padding: 1px 4px;
+}
+
+.spinner mat-spinner {
+  display: inline;
+}
+
+.primary .spinner ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: white !important;
+}
