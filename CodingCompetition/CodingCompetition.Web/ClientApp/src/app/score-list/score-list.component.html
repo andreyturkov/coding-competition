@@ -11,15 +11,37 @@
       <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="submissions">
-      <th mat-header-cell *matHeaderCellDef> Submissions </th>
-      <td mat-cell *matCellDef="let element"> {{getPlayerSuccessSubmissions(element)}} </td>
+    <ng-container matColumnDef="score">
+      <th mat-header-cell *matHeaderCellDef> Score </th>
+      <td mat-cell *matCellDef="let element"> <div [style.color]="getTotalScore(element) > 50 ?  'green': 'red'">{{getTotalScore(element) | number}} %</div></td>
     </ng-container>
 
-    <ng-container matColumnDef="challenges">
-      <th mat-header-cell *matHeaderCellDef> Challenges </th>
+    <ng-container matColumnDef="totalSubmissions">
+      <th mat-header-cell *matHeaderCellDef> Total Submissions </th>
+      <td mat-cell *matCellDef="let element"> {{element.submissions.length}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="successfulSubmissions">
+      <th mat-header-cell *matHeaderCellDef> Successful Submissions </th>
+      <td mat-cell *matCellDef="let element"> {{getSuccessSubmissions(element).length}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="successfulChallenges">
+      <th mat-header-cell *matHeaderCellDef> Successful Challenges </th>
       <td mat-cell *matCellDef="let element">
-        <div class="row" *ngFor="let submission of element.submissions">{{submission.challenge.name}}</div>
+        <div class="row" *ngFor="let submission of getSuccessSubmissions(element)">{{submission.challenge.name}}</div>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="failedSubmissions">
+      <th mat-header-cell *matHeaderCellDef> Failed Submissions </th>
+      <td mat-cell *matCellDef="let element"> {{getFailSubmissions(element).length}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="failedChallenges">
+      <th mat-header-cell *matHeaderCellDef> Failed Challenges </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="row" *ngFor="let submission of getFailSubmissions(element)">{{submission.challenge.name}}</div>
       </td>
     </ng-container>
 

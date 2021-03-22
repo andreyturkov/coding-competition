@@ -4,12 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ScoreListComponent } from './score-list/score-list.component';
 import { ChallengeComponent } from './challenge/challenge.component';
+import { Error404Component } from './error404/error404.component';
 
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'score-list', component: ScoreListComponent },
-  { path: 'challenge/:id', component: ChallengeComponent }
+  { path: 'challenge/:id', component: ChallengeComponent },
+  { path: '**', component: Error404Component }
 ];
 
 @NgModule({
