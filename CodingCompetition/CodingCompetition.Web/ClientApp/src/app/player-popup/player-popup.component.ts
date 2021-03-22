@@ -28,8 +28,8 @@ export class PlayerPopupComponent {
   save() {
     if (this.draftData.nickname && this.draftData.email) {
       this.playerManager.setPlayer(this.draftData.nickname, this.draftData.email);
+      this.close();
     }
-    this.close();
   }
 
   close(): void {
