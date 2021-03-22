@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "echo hello && ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "build:ssr": "ng run CodingCompetition.Web:server:dev",
     "test": "ng test",
     "lint": "ng lint",
