@@ -50,6 +50,11 @@ namespace CodingCompetition.Application.Services
 					break;
 				}
 
+				if (string.IsNullOrEmpty(result.Runtime))
+				{
+					result.Runtime = compileResult.Statistic;
+				}
+
 				result.TestResults.Add(new Models.Competition.TestResult
 				{
 					Success = compileResult.Result == test.ExpectedResult,
@@ -60,10 +65,8 @@ namespace CodingCompetition.Application.Services
 			}
 
 			result.Success = result.TestResults.Count(x => x.Success) == challenge.Tests.Count;
-			result.Message = $"Passed {result.TestResults.Count(x => x.Success)} of {result.TestResults.Count}";
-
+			result.Message = $"Passed {result.TestResults.Count(x => x.Success)} of {challenge.Tests.Count}";
 			return result;
-
 		}
 
 		public async Task<Result> SubmitSolution(SubmitRequest request)
