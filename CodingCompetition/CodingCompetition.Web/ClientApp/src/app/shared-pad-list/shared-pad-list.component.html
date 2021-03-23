@@ -18,12 +18,12 @@
           <a class="nav-link text-dark" style="width: 100%" [routerLink]="'/shared-pad/' + item">
             <div class="row">
               <div class="col-sm-4"><b>#{{i}} Pad</b></div>
-              <div class="col-sm-4">{{item}}</div>
+              <div class="col-sm-4">{{item.id}}</div>
             </div>
           </a>
         </div>
         <div class="col-sm-4">
-          <button style="float: right" mat-raised-button color="primary" class="primary" [routerLink]="'/shared-pad/' + item">Open</button>
+          <button style="float: right" mat-raised-button color="primary" class="primary" [routerLink]="'/shared-pad/' + item.id">Open</button>
           <button style="float: right" mat-button color="primary" (click)="removePad(i)"> Delete</button>
         </div>
       </mat-list-item>

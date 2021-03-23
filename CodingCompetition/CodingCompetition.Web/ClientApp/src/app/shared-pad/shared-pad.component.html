@@ -1,21 +1,26 @@
 <div class="container">
-  <ace-editor #editor
-              *ngIf="codePad"
-              [(text)]="codePad.code"
-              [options]="options"
-              [mode]="'csharp'"
-              [theme]="'eclipse'"
-              [readOnly]="false"
-              [autoUpdateContent]="true"
-              [durationBeforeCallback]="100"
-              (textChanged)="codeChanged($event)"
-              (blur)="log($event, 'blur')"
-              (focus)="log($event, 'focus')"
-              (copy)="log($event, 'copy')"
-              (paste)="log($event, 'paste')"
-              (change)="log($event, 'change')"
-              (changeSession)="log($event, 'changeSession')"
-              (changeCursor)="log($event, 'changeCursor')"
-              (changeSelection)="log($event, 'changeSelection')"
-              style="min-height: 700px; height: 100%; width: 100%; overflow: auto;"></ace-editor>
+  <div class="row">
+    <ace-editor #editor
+                *ngIf="codePad"
+                [(text)]="codePad.code"
+                [options]="options"
+                [mode]="'csharp'"
+                [theme]="'eclipse'"
+                [readOnly]="false"
+                [autoUpdateContent]="true"
+                [durationBeforeCallback]="100"
+                (textChanged)="codeChanged($event)"
+                (blur)="log($event, 'blur')"
+                (focus)="log($event, 'focus')"
+                (copy)="log($event, 'copy')"
+                (paste)="log($event, 'paste')"
+                (change)="log($event, 'change')"
+                (changeSession)="log($event, 'changeSession')"
+                (changeCursor)="log($event, 'changeCursor')"
+                (changeSelection)="log($event, 'changeSelection')"
+                style="min-height: 700px; height: 100%; width: 100%; overflow: auto;"></ace-editor>
+  </div>
+  <div class="row">
+    <div class="col-sm-6" *ngFor="let item of users">{{item.name}}</div>
+  </div>
 </div>

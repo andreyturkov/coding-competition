@@ -14,6 +14,8 @@ namespace CodingCompetition.Application
 			services.AddTransient<ITestResultService, TestResultService>();
 			services.AddTransient<IChallengeService, ChallengeService>();
 			services.AddTransient<IPlayerService, PlayerService>();
+			services.AddTransient<ISharedPadService, SharedPadService>();
+			services.AddTransient<ISharedCodePadFactory, SharedCodePadFactory>();
 
 			services.AddTransient<ICompetitionService, CompetitionService>();
 

@@ -1,0 +1,18 @@
+<div class="container">
+  <h4 mat-dialog-title>Player</h4>
+  <div mat-dialog-content style="min-height: 150px">
+    <div>
+      <mat-form-field>
+        <mat-label>Nickname</mat-label>
+        <input matInput [(ngModel)]="draftData.nickname" required>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="dialog-actions">
+    <div></div>
+    <div>
+      <button mat-raised-button class="secondary-buttom" (click)="close()">Cancel</button>
+      <button mat-raised-button class="main-buttom" color="primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>
