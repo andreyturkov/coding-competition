@@ -8,6 +8,7 @@ import { SignalRService } from '../shared/signal-r.service';
 import { CodePad } from '../models/shared-pad/code-pad.model';
 import { SharedPadUserPopupComponent } from '../shared-pad-user-popup/shared-pad-user-popup.component';
 import { CodePadUser } from '../models/shared-pad/code-pad-user.model';
+import { RunResult } from '../models/shared-pad/run-result.model';
 
 @Component({
   selector: 'shared-pad',
@@ -16,12 +17,16 @@ import { CodePadUser } from '../models/shared-pad/code-pad-user.model';
 })
 export class SharedPadComponent implements OnInit, OnDestroy {
 
+  private skipChange = false;
+  isRunning = false;
+
   padId: string;
   codePad: CodePad;
   users: CodePadUser[];
   connectionEstablished: Observable<boolean>;
+  runResult: RunResult;
+
   options: any = { printMargin: false, enableBasicAutocompletion: true };
-  private skipChange = false;
 
   constructor(public dialog: MatDialog,
     private http: ApiService,
@@ -47,6 +52,12 @@ export class SharedPadComponent implements OnInit, OnDestroy {
       if (this.padId === padId) {
         this.router.navigateByUrl('/shared-pad-list');
       }
+    });
+    this.signalRService.padRunning$.subscribe((result) => {
+      this.isRunning = result;
+    });
+    this.signalRService.padRun$.subscribe((result) => {
+      this.runResult = result;
     });
   }
 
@@ -79,6 +90,7 @@ export class SharedPadComponent implements OnInit, OnDestroy {
     if (this.signalRService.isConnected) {
       this.signalRService.leaveCodePad(this.padId);
     }
+    localStorage.removeItem('shared-pad-user');
   }
 
   openUserDialog(): void {
@@ -102,12 +114,21 @@ export class SharedPadComponent implements OnInit, OnDestroy {
 
   codeChanged(event) {
     if (this.skipChange) {
-      this.skipChange = true;
+      this.skipChange = false;
       return;
     }
     if (this.signalRService.isConnected) {
       this.signalRService.updateCodePad(this.padId, this.codePad);
     }
     this.http.put<void>(`SharedPad/${this.padId}`, this.codePad).subscribe(() => { });
+  }
+
+  run(): void {
+    this.isRunning = true;
+    this.http.post<RunResult>('SharedPad/Run', this.codePad).subscribe(result => {
+      this.isRunning = false;
+      this.runResult = result;
+    });
+
   }
 }

@@ -35,7 +35,7 @@ export class SharedPadListComponent implements OnInit {
     const pad = this.pads[index];
     this.http.delete<boolean>(`SharedPad/${pad.id}`).subscribe(result => {
       if (result) {
-        this.pads.splice(index);
+        this.pads.splice(index, 1);
       }
     });
   }

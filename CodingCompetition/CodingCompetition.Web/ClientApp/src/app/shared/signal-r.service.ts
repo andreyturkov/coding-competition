@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { CodePad } from '../models/shared-pad/code-pad.model';
 import { Message } from '../models/message.model';
 import { CodePadUser } from '../models/shared-pad/code-pad-user.model';
+import { RunResult } from '../models/shared-pad/run-result.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -13,6 +14,8 @@ export class SignalRService {
   userJoined$ = new Subject<CodePadUser>();
   userLeft$ = new Subject<string>();
   codePadRemoved$ = new Subject<string>();
+  padRunning$ = new Subject<boolean>();
+  padRun$ = new Subject<RunResult>();
 
   connectionEstablished$ = new BehaviorSubject<boolean>(false);
 
@@ -80,5 +83,12 @@ export class SignalRService {
       console.log(message);
       this.codePadRemoved$.next(message);
     });
+    this.hubConnection.on('Running', (message: boolean) => {
+      this.padRunning$.next(message);
+    });
+    this.hubConnection.on('Run', (message: RunResult) => {
+      this.padRun$.next(message);
+    });
+
   }
 }

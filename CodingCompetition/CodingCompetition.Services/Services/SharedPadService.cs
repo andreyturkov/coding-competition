@@ -4,7 +4,11 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using CodingCompetition.Application.Util;
+using CodingCompetition.Compiler.Interfaces;
+using CodingCompetition.Compiler.Models;
 
 namespace CodingCompetition.Application.Services
 {
@@ -17,11 +21,15 @@ namespace CodingCompetition.Application.Services
 
 		private readonly IMemoryCache _memoryCache;
 		private readonly ISharedCodePadFactory _codePadFactory;
+		private readonly ICodeCompiler _codeCompiler;
+		private readonly IMapper _mapper;
 
-		public SharedPadService(IMemoryCache memoryCache, ISharedCodePadFactory codePadFactory)
+		public SharedPadService(IMemoryCache memoryCache, ISharedCodePadFactory codePadFactory, ICodeCompiler codeCompiler, IMapper mapper)
 		{
 			_memoryCache = memoryCache;
 			_codePadFactory = codePadFactory;
+			_codeCompiler = codeCompiler;
+			_mapper = mapper;
 		}
 
 		public string CreatePad()
@@ -90,6 +98,23 @@ namespace CodingCompetition.Application.Services
 		public IList<CodePadUser> GetPadUsers(string padId)
 		{
 			return _memoryCache.Get<Dictionary<string, CodePadUser>>($"{UsersEntry}{padId}").Values.ToList();
+		}
+
+		public async Task<RunResult> Run(CodePad pad)
+		{
+			var request = CreateCompileRequest(pad);
+			var result = await _codeCompiler.RunCode(request);
+
+			return _mapper.Map<RunResult>(result);
+		}
+
+		private static CompileRequest CreateCompileRequest(CodePad pad)
+		{
+			return new CompileRequest
+			{
+				Code = pad.Code,
+				Language = (Language)(int)pad.Language
+			};
 		}
 	}
 }

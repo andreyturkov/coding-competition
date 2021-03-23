@@ -1,5 +1,10 @@
 <div class="container">
   <div class="row">
+    <div class="col-sm-6">
+      <span style="display: inline-block; margin-right: 5px" *ngFor="let item of users">{{item.name}} </span>
+    </div>
+  </div>
+  <div class="row">
     <ace-editor #editor
                 *ngIf="codePad"
                 [(text)]="codePad.code"
@@ -18,9 +23,30 @@
                 (changeSession)="log($event, 'changeSession')"
                 (changeCursor)="log($event, 'changeCursor')"
                 (changeSelection)="log($event, 'changeSelection')"
-                style="min-height: 700px; height: 100%; width: 100%; overflow: auto;"></ace-editor>
+                style="min-height: 600px; height: 100%; width: 100%; overflow: auto;"></ace-editor>
   </div>
   <div class="row">
-    <div class="col-sm-6" *ngFor="let item of users">{{item.name}}</div>
+    <button (click)="run()" mat-raised-button color="primary" class="primary float-right" style="width: 100px;">
+      Run
+      <span *ngIf="isRunning" class="spinner">
+        <mat-spinner [diameter]="24"></mat-spinner>
+      </span>
+    </button>
+  </div>
+  <div class="row">
+    <div *ngIf="runResult">
+      <div class="row" [style.color]="runResult.success?  'green': 'red'">
+        {{runResult.result}}
+      </div>
+      <div class="row">
+        {{runResult.statistic}}
+      </div>
+      <div class="row" style="color: orange">
+        {{runResult.warnings}}
+      </div>
+      <div class="row" style="color: red">
+        {{runResult.errors}}
+      </div>
+    </div>
   </div>
 </div>

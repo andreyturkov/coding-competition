@@ -57,5 +57,18 @@ namespace CodingCompetition.Web.Controllers
 		{
 			return _sharedPadService.GetPadUsers(padId);
 		}
+
+		[HttpPost("Run")]
+		public async Task<RunResult> Run(CodePad pad)
+		{
+			await _hubContext.Clients.Group(pad.Id).SendAsync("Running", true);
+
+			var result = await _sharedPadService.Run(pad);
+
+			await _hubContext.Clients.Group(pad.Id).SendAsync("Running", false);
+			await _hubContext.Clients.Group(pad.Id).SendAsync("Run", result);
+
+			return result;
+		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using CodingCompetition.Application.Models.SharedPad;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CodingCompetition.Application.Interfaces
 {
@@ -14,5 +15,7 @@ namespace CodingCompetition.Application.Interfaces
 		bool AddPadUser(string padId, CodePadUser user);
 		bool RemovePadUser(string padId, string userId);
 		IList<CodePadUser> GetPadUsers(string padId);
+
+		Task<RunResult> Run(CodePad pad);
 	}
 }
