@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-
-namespace CodingCompetition.Web.Util
+namespace CodingCompetition.Application.Util
 {
 	public static class MemoryCacheExtensions
 	{

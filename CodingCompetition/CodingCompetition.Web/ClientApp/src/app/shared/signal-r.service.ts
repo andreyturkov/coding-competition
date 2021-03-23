@@ -1,16 +1,22 @@
 import { Injectable, Inject } from '@angular/core';
 import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { CodePad } from '../models/shared-pad/code-pad.model';
+import { Message } from '../models/message.model';
+import { CodePadUser } from '../models/shared-pad/code-pad-user.model';
+import { RunResult } from '../models/shared-pad/run-result.model';
 
-import { CodePad } from '../models/code-pad.model';
 
 @Injectable({ providedIn: 'root' })
 export class SignalRService {
 
   messageReceived$ = new Subject<CodePad>();
-  userJoined$ = new Subject<string>();
+  userJoined$ = new Subject<CodePadUser>();
   userLeft$ = new Subject<string>();
   codePadRemoved$ = new Subject<string>();
+  padRunning$ = new Subject<boolean>();
+  padRun$ = new Subject<RunResult>();
+
   connectionEstablished$ = new BehaviorSubject<boolean>(false);
 
   get isConnected(): boolean {
@@ -26,11 +32,11 @@ export class SignalRService {
   }
 
   updateCodePad(id: string, codePad: CodePad) {
-    this.hubConnection.invoke('SendCodePad', id, codePad);
+    this.hubConnection.invoke('UpdatePad', id, new Message<CodePad>(this.hubConnection.connectionId, codePad));
   }
 
-  joinCodePad(id: string) {
-    this.hubConnection.invoke('JoinGroup', id);
+  joinCodePad(id: string, userName: string) {
+    this.hubConnection.invoke('JoinGroup', id, userName);
   }
 
   leaveCodePad(id: string) {
@@ -57,23 +63,32 @@ export class SignalRService {
   }
 
   private registerOnServerEvents(): void {
-    this.hubConnection.on('CodePad', (data: any) => {
-      this.messageReceived$.next(data);
+    this.hubConnection.on('Update', (message: Message<CodePad>) => {
+      if (message.sender !== this.hubConnection.connectionId) {
+        this.messageReceived$.next(message.data);
+      }
     });
 
-    this.hubConnection.on('Join', (data: any) => {
-      console.log(data);
-      this.userJoined$.next(data);
+    this.hubConnection.on('Join', (message: CodePadUser) => {
+      console.log(message);
+      this.userJoined$.next(message);
     });
 
-    this.hubConnection.on('Leave', (data: any) => {
-      console.log(data);
-      this.userLeft$.next(data);
+    this.hubConnection.on('Leave', (message: string) => {
+      console.log(message);
+      this.userLeft$.next(message);
     });
 
-    this.hubConnection.on('RemoveCodePad', (data: any) => {
-      console.log(data);
-      this.codePadRemoved$.next(data);
+    this.hubConnection.on('Remove', (message: string) => {
+      console.log(message);
+      this.codePadRemoved$.next(message);
     });
+    this.hubConnection.on('Running', (message: boolean) => {
+      this.padRunning$.next(message);
+    });
+    this.hubConnection.on('Run', (message: RunResult) => {
+      this.padRun$.next(message);
+    });
+
   }
 }

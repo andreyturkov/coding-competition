@@ -1,28 +1,42 @@
-﻿using CodingCompetition.Web.Controllers;
+﻿using CodingCompetition.Application.Interfaces;
+using CodingCompetition.Application.Models.SharedPad;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
+using CodingCompetition.Web.Models;
 
 namespace CodingCompetition.Web.Hubs
 {
 	public class SharedPadHub : Hub
 	{
-		public async Task JoinGroup(string groupName)
-		{
-			await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+		private readonly ISharedPadService _sharedPadService;
 
-			await Clients.Group(groupName).SendAsync("Join", $"{Context.ConnectionId} has joined the group {groupName}.");
+		public SharedPadHub(ISharedPadService sharedPadService)
+		{
+			_sharedPadService = sharedPadService;
 		}
 
-		public async Task LeaveGroup(string groupName)
+		public async Task JoinGroup(string padId, string nickname)
 		{
-			await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+			await Groups.AddToGroupAsync(Context.ConnectionId, padId);
 
-			await Clients.Group(groupName).SendAsync("Leave", $"{Context.ConnectionId} has left the group {groupName}.");
+			var user = new CodePadUser(Context.ConnectionId, nickname);
+			_sharedPadService.AddPadUser(padId, user);
+
+			await Clients.Group(padId).SendAsync("Join", user);
 		}
 
-		public async Task SendCodePad(string groupName, CodePad codePad)
+		public async Task LeaveGroup(string padId)
 		{
-			await Clients.Group(groupName).SendAsync("CodePad", codePad);
+			await Groups.RemoveFromGroupAsync(Context.ConnectionId, padId);
+
+			_sharedPadService.RemovePadUser(padId, Context.ConnectionId);
+
+			await Clients.Group(padId).SendAsync("Leave", Context.ConnectionId);
+		}
+
+		public async Task UpdatePad(string padId, Message<CodePad> message)
+		{
+			await Clients.Group(padId).SendAsync("Update", message);
 		}
 	}
 }

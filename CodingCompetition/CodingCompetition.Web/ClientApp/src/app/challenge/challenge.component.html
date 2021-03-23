@@ -4,7 +4,7 @@
     <div class="col-lg">
       <div class="row">
         <div class="col-lg"></div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 float-right">
           <mat-form-field appearance="fill" *ngIf="selectedTemplate">
             <mat-label>
               Theme
@@ -19,7 +19,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-sm">
+        <div class="col-sm float-right">
           <mat-form-field appearance="fill" *ngIf="challenge">
             <mat-label>Language</mat-label>
             <mat-select (selectionChange)="updateEditor($event.value)" [(value)]="selectedTemplate">

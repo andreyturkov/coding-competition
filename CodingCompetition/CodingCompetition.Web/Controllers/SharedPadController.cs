@@ -1,65 +1,74 @@
-﻿using CodingCompetition.Web.Hubs;
+﻿using CodingCompetition.Application.Interfaces;
+using CodingCompetition.Application.Models.SharedPad;
+using CodingCompetition.Web.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using CodingCompetition.Web.Util;
 
 namespace CodingCompetition.Web.Controllers
 {
 	public class SharedPadController : BaseApiController
 	{
-		private readonly MemoryCacheEntryOptions _cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(180));
 		private readonly IHubContext<SharedPadHub> _hubContext;
-		private readonly IMemoryCache _cache;
+		private readonly ISharedPadService _sharedPadService;
 
-		public SharedPadController(IHubContext<SharedPadHub> hubContext, IMemoryCache cache)
+		public SharedPadController(IHubContext<SharedPadHub> hubContext, ISharedPadService sharedPadService)
 		{
 			_hubContext = hubContext;
-			_cache = cache;
-		}
-
-		[HttpGet("{id}")]
-		public CodePad Get(string id)
-		{
-			return _cache.Get<CodePad>($"{id}");
+			_sharedPadService = sharedPadService;
 		}
 
 		[HttpGet]
-		public string[] GetAll()
+		public IList<CodePad> GetAll()
 		{
-			return _cache.GetKeys<string>().ToArray();
+			return _sharedPadService.GetAllPads();
+		}
+
+		[HttpGet("{padId}")]
+		public CodePad Get(string padId)
+		{
+			return _sharedPadService.GetPad(padId);
 		}
 
 		[HttpPost]
-		public IActionResult CreatePad(CodePad codePad)
+		public IActionResult Create()
 		{
-			var id = Guid.NewGuid().ToString("N").ToUpper().Substring(0, 10);
-			_cache.Set($"{id}", codePad, _cacheOptions);
+			var id = _sharedPadService.CreatePad();
 			return Ok(new { id });
 		}
 
-		[HttpPut("{id}")]
-		public bool Save(string id, [FromBody]CodePad codePad)
+		[HttpPut]
+		public bool Update(CodePad codePad)
 		{
-			_cache.Set($"{id}", codePad, _cacheOptions);
-			return true;
+			return _sharedPadService.UpdatePad(codePad);
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<bool> Remove(string id)
+		[HttpDelete("{padId}")]
+		public async Task<bool> Remove(string padId)
 		{
-			_cache.Remove($"{id}");
-			await _hubContext.Clients.Group(id).SendAsync("RemoveCodePad", id);
-			return true;
+			await _hubContext.Clients.Group(padId).SendAsync("Remove", padId);
+
+			return _sharedPadService.RemovePad(padId);
 		}
 
-		[HttpGet("Users/{id}")]
-		public string[] GetUsers(string id)
+		[HttpGet("{padId}/Users")]
+		public IList<CodePadUser> GetUsers(string padId)
 		{
-			return new string[0];
+			return _sharedPadService.GetPadUsers(padId);
+		}
+
+		[HttpPost("Run")]
+		public async Task<RunResult> Run(CodePad pad)
+		{
+			await _hubContext.Clients.Group(pad.Id).SendAsync("Running", true);
+
+			var result = await _sharedPadService.Run(pad);
+
+			await _hubContext.Clients.Group(pad.Id).SendAsync("Running", false);
+			await _hubContext.Clients.Group(pad.Id).SendAsync("Run", result);
+
+			return result;
 		}
 	}
 }

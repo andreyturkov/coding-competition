@@ -24,6 +24,7 @@ import { Error404Component } from './error404/error404.component';
 import { SharedPadListComponent } from './shared-pad-list/shared-pad-list.component';
 import { SharedPadComponent } from './shared-pad/shared-pad.component';
 import { SignalRService } from './shared/signal-r.service';
+import { SharedPadUserPopupComponent } from './shared-pad-user-popup/shared-pad-user-popup.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SignalRService } from './shared/signal-r.service';
     PlayerPopupComponent,
     Error404Component,
     SharedPadListComponent,
-    SharedPadComponent
+    SharedPadComponent,
+    SharedPadUserPopupComponent
   ],
   imports: [
     BrowserAnimationsModule,
